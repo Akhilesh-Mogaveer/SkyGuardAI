@@ -156,7 +156,13 @@ export default function App() {
     loadInitialData();
 
     // Setup WebSocket for real-time observation streaming
-    const wsUrl = 'ws://127.0.0.1:8000/ws/observations';
+    const protocol =
+    window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+
+    const wsUrl =
+    `${protocol}//${window.location.host}/ws/observations`;
+
+    const ws = new WebSocket(wsUrl);
     let socket;
 
     const connectWs = () => {

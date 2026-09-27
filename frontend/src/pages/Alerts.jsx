@@ -224,7 +224,13 @@ export default function Alerts({
 
   // Direct WebSocket stream listener for real-time alert updates in Alerts tab
   useEffect(() => {
-    const wsUrl = 'ws://127.0.0.1:8000/ws/observations';
+    const protocol =
+    window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+
+    const wsUrl =
+    `${protocol}//${window.location.host}/ws/observations`;
+
+    const ws = new WebSocket(wsUrl);
     let socket;
     try {
       socket = new WebSocket(wsUrl);

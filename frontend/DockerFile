@@ -1,44 +1,51 @@
-# ============================================================================
-# SkyGuardAI Frontend Dockerfile (React)
-# ============================================================================
-# Multi-stage build: build and then serve
+# ============================================================
+# SkyGuard AI - React/Vite Frontend
+# ============================================================
 
-# Stage 1: Build
-FROM node:16-alpine AS builder
+# ------------------------------------------------------------
+# Stage 1: Build React application
+# ------------------------------------------------------------
+FROM node:20-alpine AS builder
 
-WORKDIR /app/frontend
+WORKDIR /app
 
-# Copy package files
-COPY frontend/package*.json ./
+# Copy package files first
+# This allows Docker to cache npm install
+COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
 
-# Copy source code
-COPY frontend/src ./src
-COPY frontend/public ./public
+# Copy complete frontend source
+COPY . .
 
-# Build the application
+# Build Vite application
 RUN npm run build
 
-# ============================================================================
-# Stage 2: Runtime
-FROM node:16-alpine
 
-WORKDIR /app/frontend
+# ------------------------------------------------------------
+# Stage 2: Nginx production server
+# ------------------------------------------------------------
+FROM nginx:alpine
 
-# Install serve to run the app
-RUN npm install -g serve
+# Remove default nginx files
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy built files from builder stage
-COPY --from=builder /app/frontend/build ./build
+# Copy Vite production build
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose port
-EXPOSE 3000
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Frontend exposed through nginx
+EXPOSE 80
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1
+HEALTHCHECK --interval=30s \
+    --timeout=10s \
+    --start-period=5s \
+    --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://127.0.0.1/ || exit 1
 
-# Run the application
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

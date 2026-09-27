@@ -18,10 +18,13 @@ app = FastAPI(
         "and monitoring anomalies in Automatic Weather Station (AWS) observations.\n\n"
         "### Key Principles:\n"
         "- **Does NOT assume every unusual observation is a sensor fault.**\n"
-        "- Distinguishes between: `NORMAL`, `LIKELY_GENUINE_WEATHER_EVENT`, `LIKELY_SENSOR_DATA_FAULT`, and `UNCERTAIN`.\n"
-        "- Combines WMO QC, Isolation Forest, TensorFlow/Keras LSTM Autoencoder, Magnus Thermodynamics, Spatial Buddy Cross-Validation, and Sensor Historical Health."
+        "- Distinguishes between: `NORMAL`, `LIKELY_GENUINE_WEATHER_EVENT`, "
+        "`LIKELY_SENSOR_DATA_FAULT`, and `UNCERTAIN`.\n"
+        "- Combines WMO QC, Isolation Forest, TensorFlow/Keras LSTM Autoencoder, "
+        "Magnus Thermodynamics, Spatial Buddy Cross-Validation, and Sensor Historical Health."
     ),
     version="1.0.0",
+    root_path="/api",
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -48,7 +51,7 @@ def root():
         "station_id": settings.DEFAULT_STATION_ID,
         "station_name": settings.DEFAULT_STATION_NAME,
         "status": "OPERATIONAL",
-        "documentation": "/docs",
+        "documentation": "/api/docs",
     }
 
 

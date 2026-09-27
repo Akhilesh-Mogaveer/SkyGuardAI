@@ -1,41 +1,42 @@
 services:
 
+  # ==========================================================
+  # SkyGuard AI Backend
+  # ==========================================================
+
   backend:
+
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/DockerFile
+
     container_name: skyguard-backend
-    ports:
-      - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql://skyguard:skyguard@database:5432/skyguard
-    depends_on:
-      - database
+
+    expose:
+      - "8000"
+
+    volumes:
+      - ./data:/app/data
+
     restart: unless-stopped
+
+
+  # ==========================================================
+  # SkyGuard AI Frontend
+  # ==========================================================
 
   frontend:
+
     build:
       context: ./frontend
+      dockerfile: DockerFile
+
     container_name: skyguard-frontend
+
     ports:
       - "3000:80"
+
     depends_on:
       - backend
+
     restart: unless-stopped
-
-  database:
-    image: postgres:16
-    container_name: skyguard-database
-    environment:
-      POSTGRES_DB: skyguard
-      POSTGRES_USER: skyguard
-      POSTGRES_PASSWORD: skyguard
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: unless-stopped
-
-
-volumes:
-  postgres_data:
