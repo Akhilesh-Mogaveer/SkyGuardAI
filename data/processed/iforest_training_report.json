@@ -1,0 +1,33 @@
+{
+  "model": "IsolationForest",
+  "contamination": 0.03,
+  "n_estimators": 150,
+  "feature_names": [
+    "temperature",
+    "pressure",
+    "relative_humidity",
+    "temp_diff_1h",
+    "pressure_diff_1h",
+    "humidity_diff_1h",
+    "temp_rolling_std_6h",
+    "pressure_rolling_std_6h",
+    "humidity_rolling_std_6h",
+    "dew_point_spread"
+  ],
+  "train_records": 8229,
+  "validation_records": 4168,
+  "validation_anomalies": 52,
+  "validation_anomaly_rate_pct": 1.25,
+  "test_records": 4117,
+  "test_anomalies": 50,
+  "test_anomaly_rate_pct": 1.21,
+  "target_anomaly_benchmark": {
+    "timestamp": "2016-09-09 17:00:00+00:00",
+    "temperature": 41.6,
+    "pressure": 946.7,
+    "humidity": 100.0,
+    "iforest_anomaly_flag": true,
+    "iforest_anomaly_score": 1.0,
+    "iforest_decision_score": -0.1999
+  }
+}

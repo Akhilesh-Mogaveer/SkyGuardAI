@@ -1,0 +1,19 @@
+{
+  "total_processed": 155170,
+  "flag_distribution": {
+    "MISSING": 125504,
+    "PASSED": 15269,
+    "SUSPECT": 14387,
+    "GAP": 10
+  },
+  "detector_triggers": {
+    "temperature_spike": 64,
+    "pressure_spike": 236,
+    "humidity_spike": 35,
+    "temperature_flatline": 5180,
+    "pressure_flatline": 8420,
+    "humidity_flatline": 1029,
+    "missing_observations": 138656,
+    "time_gaps": 483
+  }
+}

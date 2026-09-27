@@ -1,0 +1,17 @@
+{
+  "report_type": "finalized_artifact_verification",
+  "model_type": "Keras_LSTMAutoencoder",
+  "source": "SkyGuardAI_cleaned_final.ipynb",
+  "artifact": "data/models/lstm_autoencoder.keras",
+  "scaler": "data/models/lstm_scaler.joblib",
+  "threshold_artifact": "data/models/lstm_threshold.joblib",
+  "anomaly_threshold": 0.07097852191878912,
+  "sequence_length": 24,
+  "input_dim": 3,
+  "target_columns": [
+    "TEMPERATURE",
+    "PRESSURE",
+    "HUMIDITY"
+  ],
+  "note": "Training-history metrics from the obsolete PyTorch pipeline are intentionally not reported here."
+}

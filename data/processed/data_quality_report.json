@@ -1,0 +1,207 @@
+{
+  "station_metadata": {
+    "station_id": "AWS-MAITRI-89514",
+    "station_name": "Maitri Station, Antarctica",
+    "latitude": -70.767,
+    "longitude": 11.733,
+    "elevation_m": 117.0,
+    "file_path": "D:\\user\\Documents\\SkyGuard AI\\data\\raw\\imd_maitri.csv",
+    "file_name": "imd_maitri.csv",
+    "file_size_bytes": 6277849,
+    "file_sha256": "2affb33069d51ffe05b59ae1d5ee39c612909cfdc6f430c066bb7a3e34b6309b",
+    "last_modified": 1789842240.9952521
+  },
+  "overview": {
+    "raw_rows": 155170,
+    "cleaned_rows": 155170,
+    "date_range": {
+      "start": "1985-01-01 00:00:00+00:00",
+      "end": "2016-12-19 12:00:00+00:00"
+    },
+    "duplicate_timestamps": 0,
+    "continuous_segments_count": 484
+  },
+  "missing_values": {
+    "temperature": {
+      "missing_count": 8297,
+      "valid_count": 146873,
+      "missing_pct": 5.35,
+      "max_consecutive_missing": 8059
+    },
+    "pressure": {
+      "missing_count": 8297,
+      "valid_count": 146873,
+      "missing_pct": 5.35,
+      "max_consecutive_missing": 8059
+    },
+    "wind_speed": {
+      "missing_count": 8297,
+      "valid_count": 146873,
+      "missing_pct": 5.35,
+      "max_consecutive_missing": 8059
+    },
+    "wind_direction": {
+      "missing_count": 138656,
+      "valid_count": 16514,
+      "missing_pct": 89.36,
+      "max_consecutive_missing": 138656
+    },
+    "relative_humidity": {
+      "missing_count": 138656,
+      "valid_count": 16514,
+      "missing_pct": 89.36,
+      "max_consecutive_missing": 138656
+    }
+  },
+  "time_gaps": {
+    "total_gaps": 483,
+    "statistics": {
+      "total_gaps": 483,
+      "min_gap_hours": 2.0,
+      "max_gap_hours": 59713.0,
+      "mean_gap_hours": 259.89,
+      "median_gap_hours": 7.0,
+      "p90_gap_hours": 57.8,
+      "total_missing_hours": 125043.0
+    },
+    "top_longest_gaps": [
+      {
+        "gap_id": 469,
+        "gap_start": "2001-03-09 23:00:00+00:00",
+        "gap_end": "2008-01-01 00:00:00+00:00",
+        "duration_hours": 59713.0,
+        "duration_days": 2488.04,
+        "missing_steps": 59712
+      },
+      {
+        "gap_id": 239,
+        "gap_start": "1987-01-27 09:00:00+00:00",
+        "gap_end": "1989-01-01 00:00:00+00:00",
+        "duration_hours": 16911.0,
+        "duration_days": 704.62,
+        "missing_steps": 16910
+      },
+      {
+        "gap_id": 453,
+        "gap_start": "1999-12-31 23:00:00+00:00",
+        "gap_end": "2001-01-14 18:00:00+00:00",
+        "duration_hours": 9115.0,
+        "duration_days": 379.79,
+        "missing_steps": 9114
+      },
+      {
+        "gap_id": 378,
+        "gap_start": "1992-12-31 17:00:00+00:00",
+        "gap_end": "1994-01-01 00:00:00+00:00",
+        "duration_hours": 8767.0,
+        "duration_days": 365.29,
+        "missing_steps": 8766
+      },
+      {
+        "gap_id": 236,
+        "gap_start": "1986-06-27 08:00:00+00:00",
+        "gap_end": "1987-01-25 00:00:00+00:00",
+        "duration_hours": 5080.0,
+        "duration_days": 211.67,
+        "missing_steps": 5079
+      },
+      {
+        "gap_id": 382,
+        "gap_start": "1995-01-28 13:00:00+00:00",
+        "gap_end": "1995-07-26 17:00:00+00:00",
+        "duration_hours": 4300.0,
+        "duration_days": 179.17,
+        "missing_steps": 4299
+      },
+      {
+        "gap_id": 380,
+        "gap_start": "1994-10-08 11:00:00+00:00",
+        "gap_end": "1995-01-01 00:00:00+00:00",
+        "duration_hours": 2029.0,
+        "duration_days": 84.54,
+        "missing_steps": 2028
+      },
+      {
+        "gap_id": 186,
+        "gap_start": "1986-04-04 21:00:00+00:00",
+        "gap_end": "1986-05-17 13:00:00+00:00",
+        "duration_hours": 1024.0,
+        "duration_days": 42.67,
+        "missing_steps": 1023
+      },
+      {
+        "gap_id": 245,
+        "gap_start": "1989-01-28 13:00:00+00:00",
+        "gap_end": "1989-03-01 00:00:00+00:00",
+        "duration_hours": 755.0,
+        "duration_days": 31.46,
+        "missing_steps": 754
+      },
+      {
+        "gap_id": 470,
+        "gap_start": "2010-11-30 23:00:00+00:00",
+        "gap_end": "2011-01-01 00:00:00+00:00",
+        "duration_hours": 745.0,
+        "duration_days": 31.04,
+        "missing_steps": 744
+      }
+    ]
+  },
+  "parameter_statistics": {
+    "temperature": {
+      "count": 146873,
+      "min": -50.0,
+      "max": 41.6,
+      "mean": -10.91,
+      "std": 8.27,
+      "q25": -16.3,
+      "median": -10.4,
+      "q75": -4.6,
+      "iqr": 11.7
+    },
+    "pressure": {
+      "count": 146873,
+      "min": 882.1,
+      "max": 1058.9,
+      "mean": 976.04,
+      "std": 12.62,
+      "q25": 967.5,
+      "median": 975.5,
+      "q75": 984.7,
+      "iqr": 17.2
+    },
+    "relative_humidity": {
+      "count": 16514,
+      "min": 21.0,
+      "max": 100.0,
+      "mean": 51.18,
+      "std": 17.72,
+      "q25": 38.0,
+      "median": 46.0,
+      "q75": 59.0,
+      "iqr": 21.0
+    },
+    "wind_speed": {
+      "count": 146873,
+      "min": 0.0,
+      "max": 170.0,
+      "mean": 30.81,
+      "std": 24.39,
+      "q25": 12.7,
+      "median": 25.0,
+      "q75": 45.0,
+      "iqr": 32.3
+    },
+    "wind_direction": {
+      "count": 16514,
+      "min": 0.0,
+      "max": 360.0,
+      "mean": 197.11,
+      "std": 108.61,
+      "q25": 113.0,
+      "median": 185.0,
+      "q75": 298.0,
+      "iqr": 185.0
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+    "dataset_observations": 16514,
+    "dataset_start": "2015-01-01 00:00:00",
+    "dataset_end": "2016-12-19 12:00:00",
+    "qc_flagged_observations": 953,
+    "sensor_health_score": 96.23,
+    "benchmark_injected_anomalies": 10,
+    "skyguard_precision": 0.99,
+    "skyguard_recall": 100.0,
+    "skyguard_f1": 1.96,
+    "skyguard_detected": 1009,
+    "case_study_timestamp": "2016-09-09 17:00:00",
+    "case_study_temperature": 41.6,
+    "case_study_evidence_count": 4,
+    "case_study_classification": "Likely Sensor/Data Fault",
+    "case_study_estimated_temperature": -20.0
+}

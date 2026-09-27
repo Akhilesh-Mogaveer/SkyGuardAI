@@ -1,0 +1,14 @@
+{
+  "model_type": "Keras_LSTMAutoencoder",
+  "source": "SkyGuardAI_cleaned_final.ipynb",
+  "is_fitted": true,
+  "scaler_type": "StandardScaler",
+  "sequence_length": 24,
+  "input_dim": 3,
+  "target_columns": [
+    "TEMPERATURE",
+    "PRESSURE",
+    "HUMIDITY"
+  ],
+  "anomaly_threshold": 0.07097852191878912
+}

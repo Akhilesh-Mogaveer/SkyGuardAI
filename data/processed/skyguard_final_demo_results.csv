@@ -1,0 +1,73 @@
+TIMESTAMP,TEMPERATURE,PRESSURE,HUMIDITY,QC_FLAG,IF_ANOMALY,LSTM_ANOMALY,MULTIVARIATE_ANOMALY,EVIDENCE_COUNT,FINAL_ANOMALY,FINAL_CLASSIFICATION,EXPLANATION,ESTIMATED_TEMPERATURE,RECOVERY_METHOD,RECOVERY_AVAILABLE,SENSOR_HEALTH_SCORE
+2016-09-08 00:00:00,-25.7,956.9,48.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-08 01:00:00,-25.9,956.0,49.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-08 02:00:00,-25.9,955.2,49.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-08 03:00:00,-24.9,954.4,38.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 04:00:00,-25.9,953.8,43.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 05:00:00,-26.3,953.0,45.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 06:00:00,-27.2,952.5,48.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 07:00:00,-26.7,952.0,46.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 08:00:00,-26.4,951.5,47.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-08 09:00:00,-24.5,950.7,42.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 10:00:00,-25.5,950.3,46.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 11:00:00,-23.7,949.1,45.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 12:00:00,-23.9,948.8,44.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 13:00:00,-23.0,948.0,43.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 14:00:00,-22.4,947.5,44.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 15:00:00,-23.5,947.0,44.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 16:00:00,-21.8,946.6,38.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 17:00:00,-24.9,946.2,47.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 18:00:00,-20.5,945.3,31.0,True,True,False,False,2,True,Uncertain,Rule-based quality checks flagged the observation; Isolation Forest detected an unusual multivariate pattern,-23.0,Neighbor interpolation,True,96.23198498243914
+2016-09-08 19:00:00,-21.1,945.5,33.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 20:00:00,-20.1,945.3,30.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 21:00:00,-21.2,945.0,31.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 22:00:00,-20.4,945.1,30.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-08 23:00:00,-18.8,944.9,27.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 00:00:00,-17.7,944.9,25.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 01:00:00,-21.0,944.9,34.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 02:00:00,-22.2,944.7,34.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 03:00:00,-22.8,944.5,35.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 04:00:00,-22.3,944.8,35.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 05:00:00,-20.8,945.0,28.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 06:00:00,-21.4,945.6,31.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 07:00:00,-20.4,946.4,29.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 08:00:00,-19.8,946.1,31.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 09:00:00,-19.8,946.7,32.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-09 10:00:00,-17.8,947.4,34.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 11:00:00,-19.4,947.2,33.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 12:00:00,-20.5,948.0,36.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 13:00:00,-23.1,947.5,36.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 14:00:00,-22.4,946.9,40.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 15:00:00,-22.1,946.2,40.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 16:00:00,-22.2,946.5,39.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914
+2016-09-09 17:00:00,41.6,946.7,100.0,True,True,True,True,4,True,Likely Sensor/Data Fault,"Rule-based quality checks flagged the observation; Isolation Forest detected an unusual multivariate pattern; LSTM detected an abnormal temporal pattern; Temperature, pressure and humidity changes were inconsistent",-20.0,Neighbor interpolation,True,96.23198498243914
+2016-09-09 18:00:00,-17.8,946.8,37.0,True,True,True,True,4,True,Likely Sensor/Data Fault,"Rule-based quality checks flagged the observation; Isolation Forest detected an unusual multivariate pattern; LSTM detected an abnormal temporal pattern; Temperature, pressure and humidity changes were inconsistent",11.600000000000001,Neighbor interpolation,True,96.23198498243914
+2016-09-09 19:00:00,-18.4,947.7,40.0,False,True,True,False,2,True,Uncertain,Isolation Forest detected an unusual multivariate pattern; LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-09 20:00:00,-18.6,948.5,45.0,False,True,True,False,2,True,Uncertain,Isolation Forest detected an unusual multivariate pattern; LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-09 21:00:00,-18.5,949.0,43.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-09 22:00:00,-18.3,949.4,41.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-09 23:00:00,-18.1,949.9,41.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 00:00:00,-18.3,951.3,43.0,False,True,True,False,2,True,Uncertain,Isolation Forest detected an unusual multivariate pattern; LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 01:00:00,-17.7,952.1,34.0,False,True,True,False,2,True,Uncertain,Isolation Forest detected an unusual multivariate pattern; LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 02:00:00,-18.0,953.2,37.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 03:00:00,-17.8,954.2,36.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 04:00:00,-18.0,954.9,37.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 05:00:00,-18.3,956.1,39.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 06:00:00,-18.9,956.6,42.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 07:00:00,-19.1,957.7,42.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 08:00:00,-19.1,958.5,41.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 09:00:00,-17.5,959.1,35.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 10:00:00,-17.7,959.4,34.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 11:00:00,-17.6,959.4,36.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 12:00:00,-18.5,959.7,40.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 13:00:00,-19.6,959.9,46.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 14:00:00,-19.4,959.5,45.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 15:00:00,-19.3,959.3,45.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 16:00:00,-19.9,958.9,46.0,False,False,True,False,1,False,Uncertain,LSTM detected an abnormal temporal pattern,,,False,96.23198498243914
+2016-09-10 17:00:00,-20.6,958.7,48.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-10 18:00:00,-21.1,958.3,47.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-10 19:00:00,-21.9,957.9,46.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-10 20:00:00,-22.7,957.6,51.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-10 21:00:00,-23.0,957.1,49.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-10 22:00:00,-23.9,956.5,51.0,False,False,False,False,0,False,Normal,No significant anomaly evidence detected,,,False,96.23198498243914
+2016-09-10 23:00:00,-24.9,955.9,51.0,False,True,False,False,1,False,Uncertain,Isolation Forest detected an unusual multivariate pattern,,,False,96.23198498243914

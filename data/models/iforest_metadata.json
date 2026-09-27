@@ -1,0 +1,27 @@
+{
+  "model_type": "IsolationForest",
+  "source": "SkyGuardAI_cleaned_final.ipynb",
+  "is_fitted": true,
+  "scaler_type": "StandardScaler",
+  "n_features": 16,
+  "feature_names": [
+    "TEMPERATURE",
+    "PRESSURE",
+    "HUMIDITY",
+    "TEMP_CHANGE",
+    "PRESSURE_CHANGE",
+    "HUMIDITY_CHANGE",
+    "TEMP_ROLLING_MEAN_3H",
+    "TEMP_ROLLING_STD_3H",
+    "PRESSURE_ROLLING_MEAN_3H",
+    "PRESSURE_ROLLING_STD_3H",
+    "HUMIDITY_ROLLING_MEAN_3H",
+    "HUMIDITY_ROLLING_STD_3H",
+    "HOUR_SIN",
+    "HOUR_COS",
+    "DAY_SIN",
+    "DAY_COS"
+  ],
+  "calibration_min_score": -0.5,
+  "calibration_max_score": 0.5
+}

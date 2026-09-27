@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+dist/
+frontend/node_modules/
+frontend/dist/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Raw / protected IMD data
+data/raw/
+backend/data/raw/
+
+# Large trained-model artifacts
+*.keras
+*.h5
+*.joblib
+*.pkl
+
+# Archives
+*.zip
+*.rar
+*.7z
+
+# System/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large ML files
+*.h5
+*.keras
+*.pth
+*.pt
+*.pkl
