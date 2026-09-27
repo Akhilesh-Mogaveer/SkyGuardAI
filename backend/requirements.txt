@@ -17,7 +17,7 @@ matplotlib==3.8.2
 
 # Machine Learning
 scikit-learn==1.8.0
-torch==2.1.0
+torch==2.4.0
 shap==0.43.0
 tensorflow==2.21.0
 joblib==1.5.3
