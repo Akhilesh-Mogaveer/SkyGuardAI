@@ -24,7 +24,6 @@ app = FastAPI(
         "Magnus Thermodynamics, Spatial Buddy Cross-Validation, and Sensor Historical Health."
     ),
     version="1.0.0",
-    root_path="/api",
     docs_url="/docs",
     redoc_url="/redoc",
 )
