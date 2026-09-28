@@ -112,9 +112,26 @@ class PipelineProcessingResult:
                 "status": "FLAGGED" if self.lstm_flag else ("CLEAR" if self.lstm_flag is False else "UNAVAILABLE"),
                 "available": self.lstm_mse is not None,
             },
-            "physical_consistency": self.decision.physical_result.to_dict() if self.decision.physical_result else {
-                "status": "CLEAR", "score": 0.0, "explanation": "Physically consistent"
+            "physical_consistency": (
+                self.decision.physical_result.to_dict()
+                if self.decision.physical_result
+                else {
+                    "status": "CLEAR",
+                    "score": 0.0,
+                    "explanation": "Physically consistent"
+                }
+            ),
+
+            "multivariate_consistency": {
+                "status": "FLAGGED" if self.decision.multivariate_anomaly else "CLEAR",
+                "score": (
+                    round(self.decision.multivariate_score, 4)
+                    if self.decision.multivariate_score is not None
+                    else None
+                ),
+                "is_anomaly": self.decision.multivariate_anomaly
             },
+
             "spatial_validation": self.spatial_result.to_dict(),
         }
 

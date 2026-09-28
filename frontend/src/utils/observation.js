@@ -386,16 +386,56 @@ export function analyzeEvidence(obs = {}) {
   const iforest = detectors.isolation_forest || {};
   const lstm = detectors.lstm || {};
   const physical = detectors.physical_consistency || {};
+  const multivariate = detectors.multivariate_consistency || {};
   const spatial = detectors.spatial_validation || {};
   const flaggedCount = Number(obs.evidence_count ?? obs.assessment?.evidence_count ?? 0);
   const totalAvailable = Number(obs.evidence_total ?? obs.assessment?.evidence_total ?? 0);
   const availableDetectors = [
-    { name: 'Rule-based QC', key: 'qc', flagged: qc.status === 'FLAGGED' || qc.qc_flag === 'SUSPECT' },
-    { name: 'Isolation Forest', key: 'iforest', flagged: iforest.status === 'FLAGGED' },
-    ...(lstm.available ? [{ name: 'LSTM Autoencoder', key: 'lstm', flagged: lstm.status === 'FLAGGED' }] : []),
-    ...(physical.status !== 'UNAVAILABLE' ? [{ name: 'Physical Consistency', key: 'physical', flagged: physical.status === 'FLAGGED' }] : []),
-    ...(spatial.status !== 'UNAVAILABLE' ? [{ name: 'Spatial Validation', key: 'spatial', flagged: spatial.status === 'FLAGGED' }] : []),
-  ];
+    { 
+        name: 'Rule-based QC',
+        key: 'qc',
+        flagged: qc.status === 'FLAGGED' || qc.qc_flag === 'SUSPECT'
+    },
+
+    { 
+        name: 'Isolation Forest',
+        key: 'iforest',
+        flagged: iforest.status === 'FLAGGED'
+    },
+
+    ...(lstm.available
+        ? [{
+            name: 'LSTM Autoencoder',
+            key: 'lstm',
+            flagged: lstm.status === 'FLAGGED'
+        }]
+        : []),
+
+    ...(physical.status !== 'UNAVAILABLE'
+        ? [{
+            name: 'Physical Consistency',
+            key: 'physical',
+            flagged: physical.status === 'FLAGGED'
+        }]
+        : []),
+
+    // 👇 ADD THIS BLOCK
+    ...(multivariate.status !== 'UNAVAILABLE'
+        ? [{
+            name: 'Multivariate Consistency',
+            key: 'multivariate',
+            flagged: multivariate.status === 'FLAGGED'
+        }]
+        : []),
+
+    ...(spatial.status !== 'UNAVAILABLE'
+        ? [{
+            name: 'Spatial Validation',
+            key: 'spatial',
+            flagged: spatial.status === 'FLAGGED'
+        }]
+        : []),
+      ];
 
   return {
     flaggedCount,
