@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 
@@ -22,110 +23,319 @@ import {
   fetchReplayStatus,
   startReplay,
   stopReplay,
+  clearAnomalies,
 } from './services/api';
 
+
+/* =========================================================
+   BACKEND CONFIGURATION
+   ========================================================= */
+
+// WebSocket backend URL
+//
+// For local frontend:
+// localhost:3000
+//
+// WebSocket connects directly to Render backend.
+const WS_BACKEND_URL =
+  import.meta.env.VITE_WS_URL ||
+  'https://skyguard-backend-kmko.onrender.com';
+
+const WS_URL =
+  WS_BACKEND_URL.replace(/^http:/, 'ws:')
+               .replace(/^https:/, 'wss:') +
+  '/ws/observations';
+
+
 export default function App() {
+
+  /* =======================================================
+     STATE
+     ======================================================= */
+
   const [activeTab, setActiveTab] = useState('dashboard');
+
   const [isWsConnected, setIsWsConnected] = useState(false);
+
   const [systemHealth, setSystemHealth] = useState(null);
+
   const [stations, setStations] = useState([]);
+
   const [sensorHealth, setSensorHealth] = useState(null);
+
   const [observations, setObservations] = useState([]);
+
   const [anomalies, setAnomalies] = useState([]);
+
   const [latestAlertEvent, setLatestAlertEvent] = useState(null);
+
   const [statistics, setStatistics] = useState(null);
+
   const [replayStatus, setReplayStatus] = useState(null);
+
+
+  /* =======================================================
+     REFS
+     ======================================================= */
 
   const wsRef = useRef(null);
 
-  // Initial Data Fetching
+  const reconnectTimeoutRef = useRef(null);
+
+  const isUnmountedRef = useRef(false);
+
+
+  /* =======================================================
+     INITIAL DATA FETCHING
+     ======================================================= */
+
   const loadInitialData = async (forceReset = false) => {
+
     try {
-      const [hRes, stRes, shRes, obsRes, anomRes, statsRes, repRes] = await Promise.all([
+
+      const [
+        hRes,
+        stRes,
+        shRes,
+        obsRes,
+        anomRes,
+        statsRes,
+        repRes,
+      ] = await Promise.all([
+
         fetchHealth().catch(() => null),
+
         fetchStations().catch(() => []),
+
         fetchSensorHealth().catch(() => null),
+
         fetchObservations(1000).catch(() => []),
+
         fetchAnomalies(10).catch(() => []),
+
         fetchStatistics().catch(() => null),
+
         fetchReplayStatus().catch(() => null),
+
       ]);
 
-      if (hRes) setSystemHealth(hRes);
-      if (stRes) setStations(Array.isArray(stRes) ? stRes : (stRes?.stations || []));
-      if (shRes) setSensorHealth(shRes);
+
+      /* ---------------- HEALTH ---------------- */
+
+      if (hRes) {
+        setSystemHealth(hRes);
+      }
+
+
+      /* ---------------- STATIONS ---------------- */
+
+      if (stRes) {
+
+        setStations(
+          Array.isArray(stRes)
+            ? stRes
+            : stRes?.stations || []
+        );
+
+      }
+
+
+      /* ---------------- SENSOR HEALTH ---------------- */
+
+      if (shRes) {
+        setSensorHealth(shRes);
+      }
+
+
+      /* ---------------- OBSERVATIONS ---------------- */
 
       if (obsRes) {
-        const fetchedObs = Array.isArray(obsRes) ? obsRes : (obsRes?.observations || []);
+
+        const fetchedObs =
+          Array.isArray(obsRes)
+            ? obsRes
+            : obsRes?.observations || [];
+
+
         if (forceReset) {
+
           setObservations(fetchedObs);
+
         } else {
+
           setObservations((prev) => {
+
             const map = new Map();
+
+
             prev.forEach((o) => {
-              const key = o.db_id ? `db_${o.db_id}` : o._instance_id || JSON.stringify(o);
+
+              const key =
+                o.db_id
+                  ? `db_${o.db_id}`
+                  : o._instance_id ||
+                    JSON.stringify(o);
+
               map.set(key, o);
+
             });
+
+
             fetchedObs.forEach((o) => {
-              const key = o.db_id ? `db_${o.db_id}` : o._instance_id || JSON.stringify(o);
+
+              const key =
+                o.db_id
+                  ? `db_${o.db_id}`
+                  : o._instance_id ||
+                    JSON.stringify(o);
+
               map.set(key, o);
+
             });
+
+
             return Array.from(map.values());
+
           });
+
         }
+
       } else if (forceReset) {
+
         setObservations([]);
+
       }
+
+
+      /* ---------------- ANOMALIES ---------------- */
 
       if (anomRes) {
-        const fetchedAnom = Array.isArray(anomRes) ? anomRes : (anomRes?.anomalies || []);
+
+        const fetchedAnom =
+          Array.isArray(anomRes)
+            ? anomRes
+            : anomRes?.anomalies || [];
+
+
         if (forceReset) {
+
           setAnomalies(fetchedAnom);
+
         } else {
+
           setAnomalies((prev) => {
+
             const map = new Map();
+
+
             prev.forEach((a) => {
-              const key = a.db_id ? `db_${a.db_id}` : a._instance_id || JSON.stringify(a);
+
+              const key =
+                a.db_id
+                  ? `db_${a.db_id}`
+                  : a._instance_id ||
+                    JSON.stringify(a);
+
               map.set(key, a);
+
             });
+
+
             fetchedAnom.forEach((a) => {
-              const key = a.db_id ? `db_${a.db_id}` : a._instance_id || JSON.stringify(a);
+
+              const key =
+                a.db_id
+                  ? `db_${a.db_id}`
+                  : a._instance_id ||
+                    JSON.stringify(a);
+
               map.set(key, a);
+
             });
+
+
             return Array.from(map.values());
+
           });
+
         }
+
       } else if (forceReset) {
+
         setAnomalies([]);
+
       }
 
-      if (statsRes) setStatistics(statsRes);
-      if (repRes) setReplayStatus(repRes);
-    } catch (err) {
-      console.error('Failed to load initial backend state:', err);
+
+      /* ---------------- STATISTICS ---------------- */
+
+      if (statsRes) {
+        setStatistics(statsRes);
+      }
+
+
+      /* ---------------- REPLAY ---------------- */
+
+      if (repRes) {
+        setReplayStatus(repRes);
+      }
+
+    } catch (error) {
+
+      console.error(
+        'Failed to load initial backend state:',
+        error
+      );
+
     }
+
   };
 
-  // Clear all alerts and observations from both backend DB and React memory
+
+  /* =======================================================
+     CLEAR ALERTS
+     ======================================================= */
+
   const handleClearAlerts = async () => {
-    try {
-      await fetch('/api/anomalies/clear', { method: 'POST' });
-    } catch (err) {
-      console.error('Failed to clear backend anomalies:', err);
-    }
-    setObservations([]);
-    setAnomalies([]);
-    await loadInitialData(true);
+  try {
+    await clearAnomalies();
+  } catch (err) {
+    console.error('Failed to clear backend anomalies:', err);
+  }
+
+  setObservations([]);
+  setAnomalies([]);
+
+  await loadInitialData(true);
+};
+
+
+  /* =======================================================
+     OBSERVATION UNIQUE KEY
+     ======================================================= */
+
+  const getObsKey = (observation) => {
+
+    return getAlertUniqueId(observation);
+
   };
 
-  const getObsKey = (o) => {
-    return getAlertUniqueId(o);
-  };
 
-  // Helper to ingest single observation into memory state without dropping historical records
+  /* =======================================================
+     HANDLE NEW OBSERVATION
+     ======================================================= */
+
   const handleObservationProcessed = (obs) => {
+
     if (!obs) return;
+
+
     const key = getObsKey(obs);
+
+
+    /* -----------------------------------------------------
+       Determine classification
+       ----------------------------------------------------- */
 
     const classification =
       obs.final_classification ||
@@ -134,180 +344,705 @@ export default function App() {
       obs.decision?.classification ||
       obs.classification;
 
+
+    /* -----------------------------------------------------
+       Add observation
+       ----------------------------------------------------- */
+
     setObservations((prev) => {
-      const exists = prev.some((o) => getObsKey(o) === key);
-      if (exists) return prev;
-      return [{ ...obs, _instance_id: key }, ...prev];
+
+      const exists = prev.some(
+        (o) => getObsKey(o) === key
+      );
+
+
+      if (exists) {
+        return prev;
+      }
+
+
+      return [
+        {
+          ...obs,
+          _instance_id: key,
+        },
+        ...prev,
+      ];
+
     });
 
-    if (classification && classification !== 'NORMAL') {
+
+    /* -----------------------------------------------------
+       Add anomaly if not NORMAL
+       ----------------------------------------------------- */
+
+    if (
+      classification &&
+      classification !== 'NORMAL'
+    ) {
+
       setLatestAlertEvent(obs);
+
+
       setAnomalies((prev) => {
-        const exists = prev.some((a) => getObsKey(a) === key);
-        if (exists) return prev;
-        return [{ ...obs, _instance_id: key }, ...prev];
+
+        const exists = prev.some(
+          (a) => getObsKey(a) === key
+        );
+
+
+        if (exists) {
+          return prev;
+        }
+
+
+        return [
+          {
+            ...obs,
+            _instance_id: key,
+          },
+          ...prev,
+        ];
+
       });
+
     }
 
-    fetchStatistics().then(setStatistics).catch(() => {});
+
+    /* -----------------------------------------------------
+       Refresh statistics
+       ----------------------------------------------------- */
+
+    fetchStatistics()
+      .then((data) => {
+
+        if (data) {
+          setStatistics(data);
+        }
+
+      })
+      .catch(() => {});
+
   };
 
+
+  /* =======================================================
+     WEBSOCKET CONNECTION
+     ======================================================= */
+
   useEffect(() => {
+
+    isUnmountedRef.current = false;
+
+
+    // Initial REST API data
     loadInitialData();
 
-    // Setup WebSocket for real-time observation streaming
-    const protocol =
-    window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 
-    const wsUrl =
-    `${protocol}//${window.location.host}/ws/observations`;
+    let reconnectAttempts = 0;
 
-    const ws = new WebSocket(wsUrl);
-    let socket;
 
-    const connectWs = () => {
+    const connectWebSocket = () => {
+
+      if (isUnmountedRef.current) {
+        return;
+      }
+
+
+      // Prevent duplicate connections
+      if (
+        wsRef.current &&
+        (
+          wsRef.current.readyState === WebSocket.OPEN ||
+          wsRef.current.readyState === WebSocket.CONNECTING
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      console.log(
+        'SkyGuard WebSocket:',
+        WS_URL
+      );
+
+
+      console.log(
+        'Connecting to SkyGuard WebSocket...'
+      );
+
+
       try {
-        socket = new WebSocket(wsUrl);
+
+        const socket = new WebSocket(WS_URL);
+
+
         wsRef.current = socket;
 
+
+        /* -------------------------------------------------
+           CONNECTED
+           ------------------------------------------------- */
+
         socket.onopen = () => {
+
+          console.log(
+            'Connected to SkyGuard Live WebSocket'
+          );
+
+
+          reconnectAttempts = 0;
+
           setIsWsConnected(true);
-          console.log('Connected to SkyGuard Live WebSocket');
+
         };
 
+
+        /* -------------------------------------------------
+           MESSAGE
+           ------------------------------------------------- */
+
         socket.onmessage = (event) => {
+
           try {
-            const data = JSON.parse(event.data);
+
+            const data = JSON.parse(
+              event.data
+            );
+
+
+            console.log(
+              'SkyGuard WebSocket message:',
+              data
+            );
+
+
             if (
               data.type === 'NEW_OBSERVATION' ||
-              data.event_type === 'SINGLE_OBSERVATION_PROCESSED' ||
-              data.event_type === 'NEW_OBSERVATION' ||
+              data.event_type ===
+                'SINGLE_OBSERVATION_PROCESSED' ||
+              data.event_type ===
+                'NEW_OBSERVATION' ||
               data.observation ||
               data.data
             ) {
-              const obs = data.data || data.observation || data;
-              if (obs && (obs.timestamp || obs.station_id)) {
-                handleObservationProcessed(obs);
+
+              const obs =
+                data.data ||
+                data.observation ||
+                data;
+
+
+              if (
+                obs &&
+                (
+                  obs.timestamp ||
+                  obs.station_id
+                )
+              ) {
+
+                handleObservationProcessed(
+                  obs
+                );
+
               }
+
             }
-          } catch (e) {
-            console.error('Failed to parse WebSocket message:', e);
+
+          } catch (error) {
+
+            console.error(
+              'Failed to parse WebSocket message:',
+              error
+            );
+
           }
+
         };
 
-        socket.onclose = () => {
+
+        /* -------------------------------------------------
+           ERROR
+           ------------------------------------------------- */
+
+        socket.onerror = (error) => {
+
+          console.warn(
+            'SkyGuard WebSocket error:',
+            error
+          );
+
+
           setIsWsConnected(false);
-          setTimeout(connectWs, 3000);
+
         };
 
-        socket.onerror = () => {
+
+        /* -------------------------------------------------
+           CLOSED
+           ------------------------------------------------- */
+
+        socket.onclose = (event) => {
+
+          console.warn(
+            'SkyGuard WebSocket closed.',
+            {
+              code: event.code,
+              reason: event.reason,
+            }
+          );
+
+
           setIsWsConnected(false);
+
+
+          wsRef.current = null;
+
+
+          if (
+            isUnmountedRef.current
+          ) {
+
+            return;
+
+          }
+
+
+          reconnectAttempts += 1;
+
+
+          // Maximum delay = 30 seconds
+          const delay = Math.min(
+            3000 * reconnectAttempts,
+            30000
+          );
+
+
+          console.log(
+            `Reconnecting WebSocket in ${
+              delay / 1000
+            } seconds...`
+          );
+
+
+          reconnectTimeoutRef.current =
+            setTimeout(
+              connectWebSocket,
+              delay
+            );
+
         };
-      } catch (err) {
+
+
+      } catch (error) {
+
+        console.error(
+          'Failed to create WebSocket:',
+          error
+        );
+
+
         setIsWsConnected(false);
+
       }
+
     };
 
-    connectWs();
+
+    /* -----------------------------------------------------
+       Start WebSocket
+       ----------------------------------------------------- */
+
+    connectWebSocket();
+
+
+    /* =====================================================
+       FALLBACK POLLING
+
+       Even if WebSocket is unavailable, the dashboard
+       will continue receiving backend data.
+       ===================================================== */
+
+    const pollingInterval =
+      setInterval(() => {
+
+        if (!isUnmountedRef.current) {
+
+          loadInitialData(false);
+
+        }
+
+      }, 10000);
+
+
+    /* =====================================================
+       CLEANUP
+       ===================================================== */
 
     return () => {
-      if (socket) socket.close();
+
+      isUnmountedRef.current = true;
+
+
+      if (
+        reconnectTimeoutRef.current
+      ) {
+
+        clearTimeout(
+          reconnectTimeoutRef.current
+        );
+
+      }
+
+
+      clearInterval(
+        pollingInterval
+      );
+
+
+      if (wsRef.current) {
+
+        wsRef.current.onopen = null;
+
+        wsRef.current.onmessage = null;
+
+        wsRef.current.onerror = null;
+
+        wsRef.current.onclose = null;
+
+
+        wsRef.current.close();
+
+        wsRef.current = null;
+
+      }
+
     };
+
   }, []);
 
-  // Replay Toggle
+
+  /* =======================================================
+     REPLAY TOGGLE
+     ======================================================= */
+
   const handleToggleReplay = async () => {
+
     try {
-      if (replayStatus?.is_running) {
+
+      if (
+        replayStatus?.is_running
+      ) {
+
         await stopReplay();
+
       } else {
-        await startReplay(10, 0);
+
+        await startReplay(
+          10,
+          0
+        );
+
       }
-      const updatedStatus = await fetchReplayStatus();
-      setReplayStatus(updatedStatus);
-    } catch (err) {
-      console.error('Replay toggle failed:', err);
+
+
+      const updatedStatus =
+        await fetchReplayStatus();
+
+
+      setReplayStatus(
+        updatedStatus
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Replay toggle failed:',
+        error
+      );
+
     }
+
   };
 
+
+  /* =======================================================
+     START REPLAY FROM ALERTS
+     ======================================================= */
+
+  const handleStartReplayFromAlerts =
+    async () => {
+
+      setActiveTab(
+        'data-replay'
+      );
+
+
+      try {
+
+        if (
+          !replayStatus?.is_running
+        ) {
+
+          await startReplay(
+            10,
+            0
+          );
+
+
+          const status =
+            await fetchReplayStatus();
+
+
+          setReplayStatus(
+            status
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          'Failed to start replay:',
+          error
+        );
+
+      }
+
+    };
+
+
+  /* =======================================================
+     RENDER
+     ======================================================= */
+
   return (
-    <div className="min-h-screen bg-[#0b1329] text-slate-100 flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
-      {/* Top Sticky Header */}
+
+    <div
+      className="
+        min-h-screen
+        bg-[#0b1329]
+        text-slate-100
+        flex
+        flex-col
+        font-sans
+        antialiased
+        selection:bg-cyan-500
+        selection:text-slate-950
+      "
+    >
+
+      {/* =================================================
+          HEADER
+          ================================================= */}
+
       <Header
         isWsConnected={isWsConnected}
         systemHealth={systemHealth}
         replayStatus={replayStatus}
-        onToggleReplay={handleToggleReplay}
+        onToggleReplay={
+          handleToggleReplay
+        }
       />
 
-      <div className="flex flex-1 relative">
-        {/* Left Sidebar Navigation */}
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {/* Main Content View Container */}
-        <main className="flex-1 p-6 overflow-y-auto max-w-7xl mx-auto w-full">
+      <div className="flex flex-1 relative">
+
+
+        {/* =================================================
+            SIDEBAR
+            ================================================= */}
+
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+
+
+        {/* =================================================
+            MAIN CONTENT
+            ================================================= */}
+
+        <main
+          className="
+            flex-1
+            p-6
+            overflow-y-auto
+            max-w-7xl
+            mx-auto
+            w-full
+          "
+        >
+
+
+          {/* =================================================
+              DASHBOARD
+              ================================================= */}
+
           {activeTab === 'dashboard' && (
+
             <Dashboard
               statistics={statistics}
               sensorHealth={sensorHealth}
               stations={stations}
               observations={observations}
-              onNavigateTab={setActiveTab}
+              onNavigateTab={
+                setActiveTab
+              }
             />
+
           )}
+
+
+          {/* =================================================
+              DEMO MODE
+              ================================================= */}
 
           {activeTab === 'demo' && (
+
             <DemoMode />
+
           )}
 
+
+          {/* =================================================
+              STATIONS
+              ================================================= */}
+
           {activeTab === 'stations' && (
+
             <Stations
               observations={observations}
               sensorHealth={sensorHealth}
               stations={stations}
             />
+
           )}
 
+
+          {/* =================================================
+              ALERTS
+              ================================================= */}
+
           {activeTab === 'alerts' && (
+
             <Alerts
               anomalies={anomalies}
               observations={observations}
               stations={stations}
-              latestAlertEvent={latestAlertEvent}
-              onRefresh={loadInitialData}
-              onClearAlerts={handleClearAlerts}
-              onNavigateTab={setActiveTab}
-              onStartReplay={async () => {
-                setActiveTab('data-replay');
-                if (!replayStatus?.is_running) {
-                  await startReplay(10, 0);
-                  const s = await fetchReplayStatus();
-                  setReplayStatus(s);
-                }
-              }}
-              replayStatus={replayStatus}
+              latestAlertEvent={
+                latestAlertEvent
+              }
+              onRefresh={
+                loadInitialData
+              }
+              onClearAlerts={
+                handleClearAlerts
+              }
+              onNavigateTab={
+                setActiveTab
+              }
+              onStartReplay={
+                handleStartReplayFromAlerts
+              }
+              replayStatus={
+                replayStatus
+              }
             />
+
           )}
 
+
+          {/* =================================================
+              DATA REPLAY
+              ================================================= */}
+
           {activeTab === 'data-replay' && (
+
             <DataReplay
-              observations={observations}
-              replayStatus={replayStatus}
-              onObservationProcessed={handleObservationProcessed}
-              onStartReplay={async (speed) => {
-                await startReplay(speed, 0);
-                const s = await fetchReplayStatus();
-                setReplayStatus(s);
-              }}
-              onStopReplay={async () => {
-                await stopReplay();
-                const s = await fetchReplayStatus();
-                setReplayStatus(s);
-              }}
+              observations={
+                observations
+              }
+              replayStatus={
+                replayStatus
+              }
+              onObservationProcessed={
+                handleObservationProcessed
+              }
+
+
+              onStartReplay={
+                async (speed) => {
+
+                  try {
+
+                    await startReplay(
+                      speed,
+                      0
+                    );
+
+
+                    const status =
+                      await fetchReplayStatus();
+
+
+                    setReplayStatus(
+                      status
+                    );
+
+                  } catch (error) {
+
+                    console.error(
+                      'Failed to start replay:',
+                      error
+                    );
+
+                  }
+
+                }
+              }
+
+
+              onStopReplay={
+                async () => {
+
+                  try {
+
+                    await stopReplay();
+
+
+                    const status =
+                      await fetchReplayStatus();
+
+
+                    setReplayStatus(
+                      status
+                    );
+
+                  } catch (error) {
+
+                    console.error(
+                      'Failed to stop replay:',
+                      error
+                    );
+
+                  }
+
+                }
+              }
+
             />
+
           )}
+
         </main>
+
       </div>
+
     </div>
+
   );
+
 }

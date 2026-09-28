@@ -25,14 +25,14 @@ frontend/dist/
 *.sqlite3
 
 # Raw / protected IMD data
-data/raw/
-backend/data/raw/
+# data/raw/
+# backend/data/raw/
 
 # Large trained-model artifacts
-*.keras
-*.h5
-*.joblib
-*.pkl
+# *.keras
+# *.h5
+# *.joblib
+# *.pkl
 
 # Archives
 *.zip

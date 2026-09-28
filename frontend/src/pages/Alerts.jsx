@@ -224,31 +224,48 @@ export default function Alerts({
 
   // Direct WebSocket stream listener for real-time alert updates in Alerts tab
   useEffect(() => {
-    const protocol =
-    window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const API_BASE =
+        import.meta.env.VITE_API_BASE_URL ||
+        'https://skyguard-backend-kmko.onrender.com';
 
-    const wsUrl =
-    `${protocol}//${window.location.host}/ws/observations`;
+    const wsBase = API_BASE.replace(/^http/, 'ws');
+    const wsUrl = `${wsBase}/ws/observations`;
 
-    const ws = new WebSocket(wsUrl);
     let socket;
+
     try {
-      socket = new WebSocket(wsUrl);
-      socket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          const obs = data.data || data.observation || (data.timestamp ? data : null);
-          if (obs) {
-            ingestAlertRecord(obs);
-          }
-        } catch (e) {}
-      };
-    } catch (e) {}
+        socket = new WebSocket(wsUrl);
+
+        socket.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                const obs =
+                    data.data ||
+                    data.observation ||
+                    (data.timestamp ? data : null);
+
+                if (obs) {
+                    ingestAlertRecord(obs);
+                }
+            } catch (e) {
+                console.error("WebSocket message error:", e);
+            }
+        };
+
+        socket.onerror = (error) => {
+            console.error("WebSocket connection error:", error);
+        };
+
+    } catch (e) {
+        console.error("WebSocket initialization error:", e);
+    }
 
     return () => {
-      if (socket) socket.close();
+        if (socket) {
+            socket.close();
+        }
     };
-  }, []);
+}, []);
 
   // Handle Refresh Click
   const handleRefresh = async () => {
