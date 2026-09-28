@@ -78,15 +78,16 @@ class PipelineProcessingResult:
             "message": "Recovery not applicable — valid temporal neighbors are unavailable.",
         }
 
-        # Calculate evidence counts
+        # Calculate evidence counts across 5 detector pillars
         qc_flag = (self.qc_result.qc_flag != "PASSED")
         if_flag = bool(self.iforest_flag) if self.iforest_flag is not None else False
         lstm_flag = bool(self.lstm_flag) if self.lstm_flag is not None else False
         phys_flag = (self.decision.physical_result.status == "FLAGGED") if self.decision.physical_result else False
+        phys_multi_flag = phys_flag or bool(self.decision.multivariate_anomaly)
         spat_flag = (self.spatial_result.spatial_status == "FLAGGED") if self.spatial_result else False
 
-        evidence_count = sum([qc_flag, if_flag, lstm_flag, self.decision.multivariate_anomaly])
-        evidence_total = 4
+        evidence_count = sum([qc_flag, if_flag, lstm_flag, phys_multi_flag, spat_flag])
+        evidence_total = 5
 
         assessment = {
             "classification": self.decision.classification.value,

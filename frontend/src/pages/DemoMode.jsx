@@ -231,14 +231,14 @@ export default function DemoMode() {
   const getClassificationBadge = (cls) => {
     switch (cls) {
       case 'NORMAL':
-        return { label: 'NORMAL', bg: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40' };
+        return { label: 'NORMAL', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
       case 'LIKELY_GENUINE_WEATHER_EVENT':
-        return { label: 'GENUINE WEATHER EVENT', bg: 'bg-amber-950/80 text-amber-300 border-amber-500/40' };
+        return { label: 'GENUINE WEATHER EVENT', bg: 'bg-amber-50 text-amber-700 border-amber-200' };
       case 'LIKELY_SENSOR_DATA_FAULT':
-        return { label: 'SENSOR DATA FAULT', bg: 'bg-red-950/80 text-red-300 border-red-500/40' };
+        return { label: 'SENSOR DATA FAULT', bg: 'bg-red-50 text-red-700 border-red-200' };
       case 'UNCERTAIN':
       default:
-        return { label: 'UNCERTAIN', bg: 'bg-purple-950/80 text-purple-300 border-purple-500/40' };
+        return { label: 'UNCERTAIN', bg: 'bg-purple-50 text-purple-700 border-purple-200' };
     }
   };
 
@@ -259,38 +259,38 @@ export default function DemoMode() {
   return (
     <div className="space-y-5">
       {/* Top Banner */}
-      <div className="bg-[#090e1a]/80 border border-slate-800 rounded-xl p-5 shadow-md space-y-2 backdrop-blur-md">
+      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-2">
         <div className="flex items-center space-x-2">
-          <Zap className="w-5 h-5 text-amber-400" />
-          <h2 className="text-xl font-bold text-slate-100">
+          <Zap className="w-5 h-5 text-amber-500" />
+          <h2 className="text-xl font-bold text-slate-900">
             SkyGuard AI Interactive Pipeline Flow Studio
           </h2>
-          <span className="bg-amber-950/80 text-amber-300 text-xs font-mono font-bold px-2.5 py-0.5 rounded border border-amber-500/40">
+          <span className="bg-amber-50 text-amber-700 text-xs font-mono font-bold px-2.5 py-0.5 rounded border border-amber-200">
             Live Pipeline Engine
           </span>
         </div>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-slate-500">
           Interactive 8-stage observation playback through the active production pipeline with real IMD Maitri AWS data.
         </p>
       </div>
 
       {/* Loading & Error Status Messages */}
       {isLoading && (
-        <div className="bg-cyan-950/60 border border-cyan-500/40 rounded-xl p-3.5 text-xs text-cyan-300 flex items-center space-x-2 shadow-sm animate-pulse">
-          <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
+        <div className="bg-sky-50 border border-sky-200 rounded-xl p-3.5 text-xs text-sky-700 flex items-center space-x-2 shadow-xs animate-pulse">
+          <Loader2 className="w-4 h-4 text-sky-600 animate-spin" />
           <span className="font-semibold">Preparing observation assessment...</span>
         </div>
       )}
 
       {error && (
-        <div className="bg-red-950/60 border border-red-500/40 rounded-xl p-3.5 text-xs text-red-300 flex items-center justify-between shadow-sm">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3.5 text-xs text-red-700 flex items-center justify-between shadow-xs">
           <div className="flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
             <span className="font-medium">{error}</span>
           </div>
           <button
             onClick={() => runDemoInference(currentPreset)}
-            className="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-500 flex items-center space-x-1 transition-colors"
+            className="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-700 flex items-center space-x-1 transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Retry</span>
@@ -299,14 +299,14 @@ export default function DemoMode() {
       )}
 
       {/* Toolbar: Case Jump & Playback Controls */}
-      <div className="bg-[#090e1a]/80 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md text-xs backdrop-blur-md">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs text-xs">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-          <span className="font-semibold text-slate-400">Benchmark Case:</span>
+          <span className="font-semibold text-slate-500">Benchmark Case:</span>
           <select
             value={selectedPresetId}
             onChange={(e) => handleSelectPreset(e.target.value)}
             disabled={isLoading}
-            className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-cyan-500 font-medium disabled:opacity-60"
+            className="bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-sky-500 font-medium disabled:opacity-60"
           >
             {presets.map((p) => (
               <option key={p.case_id} value={p.case_id}>
@@ -318,21 +318,21 @@ export default function DemoMode() {
           <button
             onClick={() => handleSelectPreset('temp_spike_2016_09_09')}
             disabled={isLoading}
-            className="bg-red-950/70 text-red-300 border border-red-500/40 hover:bg-red-900/80 px-3 py-1.5 rounded-lg font-bold transition-colors flex items-center space-x-1 disabled:opacity-60"
+            className="bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 px-3 py-1.5 rounded-lg font-bold transition-colors flex items-center space-x-1 disabled:opacity-60"
           >
-            <Zap className="w-3.5 h-3.5 text-red-400" />
+            <Zap className="w-3.5 h-3.5 text-red-600" />
             <span>Jump to +41.6°C Spike</span>
           </button>
         </div>
 
         <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1 bg-slate-900 p-1 rounded-lg border border-slate-800 font-mono text-xs">
+          <div className="flex items-center space-x-1 bg-slate-50 p-1 rounded-lg border border-slate-200 font-mono text-xs">
             {[1, 10, 100].map((spd) => (
               <button
                 key={spd}
                 onClick={() => setSpeedMultiplier(spd)}
                 className={`px-2 py-0.5 rounded font-bold transition-colors ${
-                  speedMultiplier === spd ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                  speedMultiplier === spd ? 'bg-sky-600 text-white' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 {spd}x
@@ -346,8 +346,8 @@ export default function DemoMode() {
               disabled={isLoading}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors flex items-center space-x-1 disabled:opacity-75 ${
                 isPlaying
-                  ? 'bg-amber-600 text-white hover:bg-amber-500'
-                  : 'bg-emerald-600 text-white hover:bg-emerald-500'
+                  ? 'bg-amber-600 text-white hover:bg-amber-700'
+                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
               }`}
             >
               {isLoading ? (
@@ -363,7 +363,7 @@ export default function DemoMode() {
             <button
               onClick={handleStepForward}
               disabled={isLoading || activeStage >= 8}
-              className="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-lg border border-slate-700 disabled:opacity-40"
+              className="p-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg border border-slate-200 disabled:opacity-40"
               title="Step Forward"
             >
               <SkipForward className="w-3.5 h-3.5" />
@@ -372,7 +372,7 @@ export default function DemoMode() {
             <button
               onClick={handleReset}
               disabled={isLoading}
-              className="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-lg border border-slate-700"
+              className="p-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg border border-slate-200"
               title="Reset Flow"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -383,23 +383,23 @@ export default function DemoMode() {
 
       {/* Case Description Card */}
       {currentPreset && (
-        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 text-xs space-y-1">
-          <div className="font-bold text-slate-100 flex items-center space-x-2">
-            <span className="text-slate-400">Case Context:</span>
-            <span className="text-cyan-400 font-mono">{currentPreset.title}</span>
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs space-y-1">
+          <div className="font-bold text-slate-900 flex items-center space-x-2">
+            <span className="text-slate-500">Case Context:</span>
+            <span className="text-sky-700 font-mono">{currentPreset.title}</span>
           </div>
-          <p className="text-slate-300 leading-relaxed">{currentPreset.description}</p>
+          <p className="text-slate-600 leading-relaxed">{currentPreset.description}</p>
         </div>
       )}
 
       {/* 8-Stage Grid */}
-      <div className="bg-[#090e1a]/80 border border-slate-800 rounded-xl p-5 space-y-5 shadow-md backdrop-blur-md">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h3 className="text-sm font-bold text-slate-100 flex items-center space-x-2">
-            <Activity className="w-4 h-4 text-cyan-400" />
+      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-5 shadow-xs">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
+            <Activity className="w-4 h-4 text-sky-600" />
             <span>8-Stage Multi-Pillar Evidence Execution Flow</span>
           </h3>
-          <span className="text-xs text-cyan-300 font-mono font-bold bg-cyan-950/80 px-2.5 py-0.5 rounded-md border border-cyan-500/40">
+          <span className="text-xs text-sky-700 font-mono font-bold bg-sky-50 px-2.5 py-0.5 rounded-md border border-sky-200">
             Step {activeStage} of 8 Active
           </span>
         </div>
@@ -416,10 +416,10 @@ export default function DemoMode() {
                 onClick={() => setActiveStage(stg.id)}
                 className={`cursor-pointer p-2.5 rounded-lg border text-center space-y-1.5 transition-colors ${
                   isCurrent
-                    ? 'bg-cyan-600 text-white font-bold border-cyan-400 shadow-md shadow-cyan-900/50'
+                    ? 'bg-sky-600 text-white font-bold border-sky-600 shadow-xs'
                     : isCompleted
-                    ? 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40'
-                    : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200'
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                    : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-800'
                 }`}
               >
                 <div className="flex justify-center">
@@ -432,25 +432,25 @@ export default function DemoMode() {
         </div>
 
         {/* Stage Execution Details */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-4 text-xs font-sans">
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-4 text-xs font-sans">
           {activeStage >= 1 && s1 && (
             <div className="space-y-2">
-              <div className="flex items-center justify-between font-bold text-slate-100 border-b border-slate-800 pb-2">
+              <div className="flex items-center justify-between font-bold text-slate-900 border-b border-slate-200 pb-2">
                 <span>Stage 1: Raw Observation Ingestion</span>
-                <span className="font-mono text-cyan-400">{s1.timestamp}</span>
+                <span className="font-mono text-sky-700">{s1.timestamp}</span>
               </div>
               <div className="grid grid-cols-3 gap-3 font-mono">
-                <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                  <span className="text-[10px] text-slate-400 block">Temperature</span>
-                  <span className="font-bold text-cyan-300">{s1.temperature}°C</span>
+                <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-500 block">Temperature</span>
+                  <span className="font-bold text-sky-700">{s1.temperature}°C</span>
                 </div>
-                <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                  <span className="text-[10px] text-slate-400 block">Pressure</span>
-                  <span className="font-bold text-slate-100">{s1.pressure} hPa</span>
+                <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-500 block">Pressure</span>
+                  <span className="font-bold text-slate-900">{s1.pressure} hPa</span>
                 </div>
-                <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                  <span className="text-[10px] text-slate-400 block">Humidity</span>
-                  <span className="font-bold text-slate-100">{s1.humidity}%</span>
+                <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-500 block">Humidity</span>
+                  <span className="font-bold text-slate-900">{s1.humidity}%</span>
                 </div>
               </div>
             </div>
@@ -458,25 +458,25 @@ export default function DemoMode() {
 
           {activeStage >= 2 && (
             s2 ? (
-              <div className="space-y-2 border-t border-slate-800 pt-3">
-                <div className="flex items-center justify-between font-bold text-slate-100">
+              <div className="space-y-2 border-t border-slate-200 pt-3">
+                <div className="flex items-center justify-between font-bold text-slate-900">
                   <span>Stage 2: WMO Quality Control Check</span>
                   <span
                     className={`px-2 py-0.5 rounded-md text-[10px] border font-bold ${
-                      s2.qc_flag ? 'bg-red-950/80 text-red-300 border-red-500/40' : 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40'
+                      s2.qc_flag ? 'bg-red-50 text-red-700 border-red-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                     }`}
                   >
                     {s2.qc_flag ? 'QC FLAGGED' : 'QC PASSED'}
                   </span>
                 </div>
                 {s2.qc_reasons && s2.qc_reasons.length > 0 && (
-                  <p className="text-red-300 font-mono text-[11px] bg-red-950/40 p-2.5 rounded-lg border border-red-500/30">
+                  <p className="text-red-700 font-mono text-[11px] bg-red-50 p-2.5 rounded-lg border border-red-200">
                     Violations: {s2.qc_reasons.join(', ')}
                   </p>
                 )}
               </div>
             ) : (
-              <div className="space-y-1 border-t border-slate-800 pt-3 text-slate-400 italic">
+              <div className="space-y-1 border-t border-slate-200 pt-3 text-slate-500 italic">
                 <span>Stage 2: WMO Quality Control Check</span>
                 <p className="text-[11px] font-mono">Pipeline evaluation pending — click "Play Flow" to evaluate.</p>
               </div>
@@ -485,16 +485,16 @@ export default function DemoMode() {
 
           {activeStage >= 3 && (
             s3 ? (
-              <div className="space-y-2 border-t border-slate-800 pt-3">
-                <div className="flex items-center justify-between font-bold text-slate-100">
+              <div className="space-y-2 border-t border-slate-200 pt-3">
+                <div className="flex items-center justify-between font-bold text-slate-900">
                   <span>Stage 3: Isolation Forest Evaluator</span>
-                  <span className="font-mono text-slate-300">
+                  <span className="font-mono text-slate-700">
                     Raw Anomaly Score: {s3.anomaly_score !== null && s3.anomaly_score !== undefined ? s3.anomaly_score.toFixed(4) : 'N/A'}
                   </span>
                 </div>
               </div>
             ) : (
-              <div className="space-y-1 border-t border-slate-800 pt-3 text-slate-400 italic">
+              <div className="space-y-1 border-t border-slate-200 pt-3 text-slate-500 italic">
                 <span>Stage 3: Isolation Forest Evaluator</span>
                 <p className="text-[11px] font-mono">Pipeline evaluation pending — click "Play Flow" to evaluate.</p>
               </div>
@@ -503,36 +503,36 @@ export default function DemoMode() {
 
           {activeStage >= 4 && (
             s4 ? (
-              <div className="space-y-2 border-t border-slate-800 pt-3">
-                <div className="flex items-center justify-between font-bold text-slate-100">
+              <div className="space-y-2 border-t border-slate-200 pt-3">
+                <div className="flex items-center justify-between font-bold text-slate-900">
                   <span>Stage 4: TensorFlow/Keras LSTM Autoencoder</span>
                   {s4.reconstruction_error_mse !== null && s4.reconstruction_error_mse !== undefined ? (
-                    <span className="font-mono text-slate-300">
+                    <span className="font-mono text-slate-700">
                       Reconstruction MSE: {s4.reconstruction_error_mse.toFixed(4)}
                     </span>
                   ) : (
-                    <span className="font-mono text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded-md border border-amber-500/40">
+                    <span className="font-mono text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
                       LSTM Unavailable
                     </span>
                   )}
                 </div>
                 {s4.reconstruction_error_mse !== null && s4.reconstruction_error_mse !== undefined && (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-[11px] text-slate-300">
-                    <div className="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                      <span className="text-slate-400 block text-[10px]">Prediction</span>
-                      <span className={`font-bold ${s4.is_anomaly ? 'text-red-400' : 'text-emerald-400'}`}>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-[11px] text-slate-800">
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <span className="text-slate-500 block text-[10px]">Prediction</span>
+                      <span className={`font-bold ${s4.is_anomaly ? 'text-red-600' : 'text-emerald-600'}`}>
                         {s4.is_anomaly ? 'ANOMALOUS SEQUENCE' : 'NORMAL SEQUENCE'}
                       </span>
                     </div>
-                    <div className="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                      <span className="text-slate-400 block text-[10px]">Threshold</span>
-                      <span className="font-bold text-slate-100">
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <span className="text-slate-500 block text-[10px]">Threshold</span>
+                      <span className="font-bold text-slate-900">
                         {s4.anomaly_threshold !== null && s4.anomaly_threshold !== undefined ? s4.anomaly_threshold.toFixed(4) : 'N/A'}
                       </span>
                     </div>
-                    <div className="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                      <span className="text-slate-400 block text-[10px]">Evidence Score</span>
-                      <span className="font-bold text-slate-100">
+                    <div className="bg-white p-2 rounded-lg border border-slate-200">
+                      <span className="text-slate-500 block text-[10px]">Evidence Score</span>
+                      <span className="font-bold text-slate-900">
                         {s4.calibrated_evidence !== null && s4.calibrated_evidence !== undefined
                           ? (s4.calibrated_evidence * 100).toFixed(1) + '%'
                           : '0%'}
@@ -542,7 +542,7 @@ export default function DemoMode() {
                 )}
               </div>
             ) : (
-              <div className="space-y-1 border-t border-slate-800 pt-3 text-slate-400 italic">
+              <div className="space-y-1 border-t border-slate-200 pt-3 text-slate-500 italic">
                 <span>Stage 4: TensorFlow/Keras LSTM Autoencoder</span>
                 <p className="text-[11px] font-mono">Pipeline evaluation pending — click "Play Flow" to evaluate.</p>
               </div>
@@ -551,16 +551,16 @@ export default function DemoMode() {
 
           {activeStage >= 5 && (
             s5 ? (
-              <div className="space-y-2 border-t border-slate-800 pt-3">
-                <div className="flex items-center justify-between font-bold text-slate-100">
+              <div className="space-y-2 border-t border-slate-200 pt-3">
+                <div className="flex items-center justify-between font-bold text-slate-900">
                   <span>Stage 5: Dew Point & Spatial Validation</span>
-                  <span className="font-mono text-cyan-300">
+                  <span className="font-mono text-sky-700">
                     Dew Point: {s5.dew_point !== null && s5.dew_point !== undefined ? `${s5.dew_point}°C` : 'N/A'}
                   </span>
                 </div>
               </div>
             ) : (
-              <div className="space-y-1 border-t border-slate-800 pt-3 text-slate-400 italic">
+              <div className="space-y-1 border-t border-slate-200 pt-3 text-slate-500 italic">
                 <span>Stage 5: Dew Point & Spatial Validation</span>
                 <p className="text-[11px] font-mono">Pipeline evaluation pending — click "Play Flow" to evaluate.</p>
               </div>
@@ -569,8 +569,8 @@ export default function DemoMode() {
 
           {activeStage >= 6 && (
             s6 ? (
-              <div className="space-y-2 border-t border-slate-800 pt-3">
-                <div className="flex items-center justify-between font-bold text-slate-100">
+              <div className="space-y-2 border-t border-slate-200 pt-3">
+                <div className="flex items-center justify-between font-bold text-slate-900">
                   <span>Stage 6: Consensus Assessment</span>
                   <span className={`px-2.5 py-0.5 rounded-md text-xs font-bold border ${getClassificationBadge(s6.primary_classification).bg}`}>
                     {getClassificationBadge(s6.primary_classification).label}
@@ -578,7 +578,7 @@ export default function DemoMode() {
                 </div>
               </div>
             ) : (
-              <div className="space-y-1 border-t border-slate-800 pt-3 text-slate-400 italic">
+              <div className="space-y-1 border-t border-slate-200 pt-3 text-slate-500 italic">
                 <span>Stage 6: Consensus Assessment</span>
                 <p className="text-[11px] font-mono">Pipeline evaluation pending — click "Play Flow" to evaluate.</p>
               </div>
@@ -587,17 +587,17 @@ export default function DemoMode() {
 
           {activeStage >= 7 && (
             s7 ? (
-              <div className="space-y-2 border-t border-slate-800 pt-3">
-                <div className="font-bold text-slate-100">Stage 7: Explanation & Recommended Action</div>
-                <p className="text-slate-200 bg-slate-900 p-2.5 rounded-lg border border-slate-800 font-mono text-[11px]">
+              <div className="space-y-2 border-t border-slate-200 pt-3">
+                <div className="font-bold text-slate-900">Stage 7: Explanation & Recommended Action</div>
+                <p className="text-slate-800 bg-white p-2.5 rounded-lg border border-slate-200 font-mono text-[11px]">
                   {s7.probable_cause}
                 </p>
-                <p className="text-amber-300 bg-amber-950/40 p-2.5 rounded-lg border border-amber-500/30 font-mono text-[11px]">
+                <p className="text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200 font-mono text-[11px]">
                   Recommended Action: {s7.recommended_operator_action}
                 </p>
               </div>
             ) : (
-              <div className="space-y-1 border-t border-slate-800 pt-3 text-slate-400 italic">
+              <div className="space-y-1 border-t border-slate-200 pt-3 text-slate-500 italic">
                 <span>Stage 7: Explanation & Recommended Action</span>
                 <p className="text-[11px] font-mono">Pipeline evaluation pending — click "Play Flow" to evaluate.</p>
               </div>
@@ -606,14 +606,14 @@ export default function DemoMode() {
 
           {activeStage >= 8 && (
             s8 ? (
-              <div className="space-y-2 border-t border-slate-800 pt-3 font-mono">
-                <div className="flex items-center justify-between font-bold text-slate-100">
+              <div className="space-y-2 border-t border-slate-200 pt-3 font-mono">
+                <div className="flex items-center justify-between font-bold text-slate-900">
                   <span>Stage 8: Sensor Health Update</span>
-                  <span className="text-emerald-400">Overall: {s8.overall_status}</span>
+                  <span className="text-emerald-700">Overall: {s8.overall_status}</span>
                 </div>
               </div>
             ) : (
-              <div className="space-y-1 border-t border-slate-800 pt-3 text-slate-400 italic">
+              <div className="space-y-1 border-t border-slate-200 pt-3 text-slate-500 italic">
                 <span>Stage 8: Sensor Health Update</span>
                 <p className="text-[11px] font-mono">Pipeline evaluation pending — click "Play Flow" to evaluate.</p>
               </div>

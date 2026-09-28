@@ -388,64 +388,104 @@ export function analyzeEvidence(obs = {}) {
   const physical = detectors.physical_consistency || {};
   const multivariate = detectors.multivariate_consistency || {};
   const spatial = detectors.spatial_validation || {};
-  const flaggedCount = Number(obs.evidence_count ?? obs.assessment?.evidence_count ?? 0);
-  const totalAvailable = Number(obs.evidence_total ?? obs.assessment?.evidence_total ?? 0);
+  const d = getDecision(obs);
+  const evScores = getEvidenceScores(obs);
+
+  const qcStatus = (qc.status === 'FLAGGED' || (qc.qc_flag && qc.qc_flag !== 'PASSED')) ? 'FLAGGED' : 'CLEAR';
+  const ifStatus = (iforest.status === 'FLAGGED' || Boolean(obs.iforest_flag) || Boolean(obs.if_anomaly)) ? 'FLAGGED' : (iforest.status || 'CLEAR');
+  const lstmStatus = (!lstm.available && (lstm.status === 'UNAVAILABLE' || lstm.available === false))
+    ? 'UNAVAILABLE'
+    : ((lstm.status === 'FLAGGED' || Boolean(obs.lstm_flag) || Boolean(obs.lstm_anomaly)) ? 'FLAGGED' : 'CLEAR');
+
+  const physFlag = physical.status === 'FLAGGED' || physical.flagged;
+  const multiFlag = multivariate.status === 'FLAGGED' || multivariate.flagged || Boolean(multivariate.is_anomaly) || Boolean(obs.multivariate_anomaly);
+  const physMultiStatus = (physFlag || multiFlag) ? 'FLAGGED' : 'CLEAR';
+
+  const rawSpatialStatus = spatial.status || obs.spatial_result?.spatial_status;
+  const spatialStatus = (rawSpatialStatus === 'FLAGGED')
+    ? 'FLAGGED'
+    : ((rawSpatialStatus === 'UNAVAILABLE' || !rawSpatialStatus || rawSpatialStatus === 'NOT_APPLICABLE') ? 'UNAVAILABLE' : 'CLEAR');
+
   const availableDetectors = [
-    { 
-        name: 'Rule-based QC',
-        key: 'qc',
-        flagged: qc.status === 'FLAGGED' || qc.qc_flag === 'SUSPECT'
+    {
+      name: 'Rule-Based Quality Control',
+      key: 'qc',
+      status: qcStatus,
+      flagged: qcStatus === 'FLAGGED',
+      available: true
     },
-
-    { 
-        name: 'Isolation Forest',
-        key: 'iforest',
-        flagged: iforest.status === 'FLAGGED'
+    {
+      name: 'Isolation Forest (ML)',
+      key: 'iforest',
+      status: ifStatus,
+      flagged: ifStatus === 'FLAGGED',
+      available: ifStatus !== 'UNAVAILABLE'
     },
+    {
+      name: 'LSTM Autoencoder (DL)',
+      key: 'lstm',
+      status: lstmStatus,
+      flagged: lstmStatus === 'FLAGGED',
+      available: lstmStatus !== 'UNAVAILABLE'
+    },
+    {
+      name: 'Physical / Multivariate Consistency',
+      key: 'physical_multivariate',
+      status: physMultiStatus,
+      flagged: physMultiStatus === 'FLAGGED',
+      available: true
+    },
+    {
+      name: 'Spatial Validation',
+      key: 'spatial',
+      status: spatialStatus,
+      flagged: spatialStatus === 'FLAGGED',
+      available: spatialStatus !== 'UNAVAILABLE'
+    }
+  ];
 
-    ...(lstm.available
-        ? [{
-            name: 'LSTM Autoencoder',
-            key: 'lstm',
-            flagged: lstm.status === 'FLAGGED'
-        }]
-        : []),
+  const totalAvailable = 4;
+  const coreDetectors = availableDetectors.filter(p => p.key !== 'spatial');
+  const flaggedCount = coreDetectors.filter(p => p.flagged).length;
+  const agreementPercentage = Math.round((flaggedCount / totalAvailable) * 100);
 
-    ...(physical.status !== 'UNAVAILABLE'
-        ? [{
-            name: 'Physical Consistency',
-            key: 'physical',
-            flagged: physical.status === 'FLAGGED'
-        }]
-        : []),
+  const rawPhysScore =
+    physical.score ??
+    obs.physical_score ??
+    obs.PHYSICAL_SCORE ??
+    d.physical_score ??
+    d.physical_result?.score ??
+    d.physical_result?.thermodynamic_violation ??
+    evScores.physical_consistency ??
+    null;
 
-    // 👇 ADD THIS BLOCK
-    ...(multivariate.status !== 'UNAVAILABLE'
-        ? [{
-            name: 'Multivariate Consistency',
-            key: 'multivariate',
-            flagged: multivariate.status === 'FLAGGED'
-        }]
-        : []),
+  const rawMultiScore =
+    multivariate.score ??
+    obs.multivariate_score ??
+    obs.MULTIVARIATE_SCORE ??
+    d.multivariate_score ??
+    evScores.multivariate_consistency ??
+    null;
 
-    ...(spatial.status !== 'UNAVAILABLE'
-        ? [{
-            name: 'Spatial Validation',
-            key: 'spatial',
-            flagged: spatial.status === 'FLAGGED'
-        }]
-        : []),
-      ];
+  let combinedScore = rawMultiScore ?? rawPhysScore;
+  if (combinedScore === null || combinedScore === undefined || (combinedScore === 0 && physMultiStatus === 'FLAGGED')) {
+    if (physMultiStatus === 'FLAGGED') {
+      combinedScore = 1.0;
+    } else {
+      combinedScore = 0.0;
+    }
+  }
 
   return {
     flaggedCount,
     totalAvailable,
-    agreementPercentage: totalAvailable > 0 ? Math.round((flaggedCount / totalAvailable) * 100) : 0,
+    agreementPercentage,
     availableDetectors,
     detectors: {
       qc: {
         available: true,
-        flagged: availableDetectors[0].flagged,
+        flagged: qcStatus === 'FLAGGED',
+        status: qcStatus,
         reasons: qc.qc_reasons || [],
         flagStr: qc.qc_flag || 'PASSED',
         tempSpike: Boolean(qc.temperature_spike),
@@ -453,28 +493,44 @@ export function analyzeEvidence(obs = {}) {
         humSpike: Boolean(qc.humidity_spike),
       },
       iforest: {
-        available: Boolean(iforest.available),
-        flagged: iforest.status === 'FLAGGED',
-        rawScore: iforest.score ?? null,
+        available: ifStatus !== 'UNAVAILABLE',
+        flagged: ifStatus === 'FLAGGED',
+        status: ifStatus,
+        rawScore: iforest.score ?? obs.iforest_score ?? null,
         evidenceScore: null,
       },
       lstm: {
-        available: Boolean(lstm.available),
-        flagged: lstm.status === 'FLAGGED',
-        mse: lstm.reconstruction_error ?? null,
+        available: lstmStatus !== 'UNAVAILABLE',
+        flagged: lstmStatus === 'FLAGGED',
+        status: lstmStatus,
+        mse: lstm.reconstruction_error ?? obs.lstm_mse ?? null,
         threshold: null,
         evidenceScore: null,
       },
       physical: {
         available: physical.status !== 'UNAVAILABLE',
         flagged: physical.status === 'FLAGGED',
-        score: physical.score ?? null,
+        status: physical.status || 'CLEAR',
+        score: rawPhysScore ?? combinedScore,
         dewPoint: physical.dew_point ?? null,
       },
+      multivariate: {
+        available: multivariate.status !== 'UNAVAILABLE',
+        flagged: multivariate.status === 'FLAGGED',
+        status: multivariate.status || 'CLEAR',
+        score: rawMultiScore ?? combinedScore,
+        isAnomaly: Boolean(multivariate.is_anomaly),
+      },
+      physicalMultivariate: {
+        available: true,
+        flagged: physMultiStatus === 'FLAGGED',
+        status: physMultiStatus,
+        score: combinedScore,
+      },
       spatial: {
-        available: spatial.status !== 'UNAVAILABLE',
-        flagged: spatial.status === 'FLAGGED',
-        status: spatial.status || 'UNAVAILABLE',
+        available: spatialStatus !== 'UNAVAILABLE',
+        flagged: spatialStatus === 'FLAGGED',
+        status: spatialStatus,
         score: spatial.evidence_score ?? null,
         buddyStation: spatial.buddy_station || null,
       },

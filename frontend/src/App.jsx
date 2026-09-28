@@ -823,14 +823,14 @@ export default function App() {
     <div
       className="
         min-h-screen
-        bg-[#0b1329]
-        text-slate-100
+        bg-slate-50
+        text-slate-900
         flex
         flex-col
         font-sans
         antialiased
-        selection:bg-cyan-500
-        selection:text-slate-950
+        selection:bg-sky-500
+        selection:text-white
       "
     >
 
